@@ -20,13 +20,33 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     const id = req.params.id;
+    projects.get(id)
+        .then(project => {
+            if (project) {
+                res.status(200).json(project);
+            } else {
+                res.status(404).json({
+                    message: "couldnt find project with that id"
+                })
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({
+                message: 'Server error',
+            });
+        });
+});
+
+router.get('/:id/actions', (req, res) => {
+    const id = req.params.id;
     projects.getProjectActions(id)
         .then(actions => {
-            if (actions) {
+            if (actions.length > 0) {
                 res.status(200).json(actions);
             } else {
                 res.status(404).json({
-                    message: "Thats not a valid project id"
+                    message: "There are no actions for that id"
                 })
             }
         })
