@@ -6,7 +6,6 @@ const actions = require("./../helpers/actionModel.js")
 const projects = require("./../helpers/projectModel.js")
 
 router.get('/', (req, res) => {
-    const id = req.params.id;
     projects.get()
         .then(projects => {
             res.status(200).json(projects);
@@ -23,7 +22,13 @@ router.get('/:id', (req, res) => {
     const id = req.params.id;
     projects.getProjectActions(id)
         .then(actions => {
-            res.status(200).json(actions);
+            if (actions) {
+                res.status(200).json(actions);
+            } else {
+                res.status(404).json({
+                    message: "Thats not a valid project id"
+                })
+            }
         })
         .catch(error => {
             console.log(error);

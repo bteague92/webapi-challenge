@@ -21,7 +21,13 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     actions.insert(req.body)
         .then(action => {
-            res.status(200).json(action);
+            if (action.id) {
+                res.status(200).json(action);
+            } else {
+                res.status(400).json({
+                    message: "invalid project id"
+                })
+            }
         })
         .catch(error => {
             console.log(error);
